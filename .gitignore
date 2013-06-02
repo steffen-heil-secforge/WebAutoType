@@ -1,0 +1,7 @@
+Releases/Build[!!-~]Outputs
+Releases/v*
+/Utilities
+WebAutoType/*.suo
+WebAutoType/*.user
+WebAutoType/bin
+WebAutoType/obj
