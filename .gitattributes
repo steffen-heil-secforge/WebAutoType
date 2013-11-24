@@ -3,6 +3,7 @@
 /PlgXExclude.txt -text
 /Readme.txt -text
 Releases/PackageRelease.bat -text
+WebAutoType/ChromeAccessibilityWinEventHook.cs -text
 WebAutoType/HotKeyManager.cs -text
 WebAutoType/Options.Designer.cs -text
 WebAutoType/Options.cs -text
