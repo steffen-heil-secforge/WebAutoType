@@ -3,6 +3,10 @@
 /PlgXExclude.txt -text
 /Readme.txt -text
 Releases/PackageRelease.bat -text
+UIALister/App.config -text
+UIALister/Program.cs -text
+UIALister/Properties/AssemblyInfo.cs -text
+UIALister/UIALister.csproj -text
 WebAutoType/ChromeAccessibilityWinEventHook.cs -text
 WebAutoType/EditAutoTypeExtraControls.Designer.cs -text
 WebAutoType/EditAutoTypeExtraControls.cs -text

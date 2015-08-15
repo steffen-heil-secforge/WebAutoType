@@ -1,5 +1,7 @@
 Releases/Build[!!-~]Outputs
 Releases/v*
+UIALister/bin
+UIALister/obj
 /Utilities
 WebAutoType/*.suo
 WebAutoType/*.user
