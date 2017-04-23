@@ -1,5 +1,6 @@
 * text=auto !eol
 /CreatePlgX.bat -text
+MSAALister/MSAALister.csproj -text
 MSAALister/Program.cs -text
 MSAALister/Properties/AssemblyInfo.cs -text
 MSAALister/WM.cs -text

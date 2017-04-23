@@ -1,3 +1,7 @@
+MSAALister/*.suo
+MSAALister/*.user
+MSAALister/bin
+MSAALister/obj
 Releases/Build[!!-~]Outputs
 Releases/v*
 UIALister/bin
