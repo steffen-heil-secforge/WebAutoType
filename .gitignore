@@ -9,5 +9,6 @@ UIALister/obj
 /Utilities
 WebAutoType/*.suo
 WebAutoType/*.user
+WebAutoType/.vs
 WebAutoType/bin
 WebAutoType/obj
