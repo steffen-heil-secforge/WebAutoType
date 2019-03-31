@@ -1,5 +1,6 @@
 MSAALister/*.suo
 MSAALister/*.user
+MSAALister/.vs
 MSAALister/bin
 MSAALister/obj
 Releases/Build[!!-~]Outputs
