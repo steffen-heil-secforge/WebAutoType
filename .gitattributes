@@ -12,6 +12,7 @@ UIALister/App.config -text
 UIALister/Program.cs -text
 UIALister/Properties/AssemblyInfo.cs -text
 UIALister/UIALister.csproj -text
+/WebAutoType svn_global_002dignores=*.DotSettings%0A
 WebAutoType/AccessibleObjectHelper.cs -text
 WebAutoType/BrowserUrlReader.cs -text
 WebAutoType/ChromeAccessibilityWinEventHook.cs -text
