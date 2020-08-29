@@ -52,6 +52,9 @@ Edge
 Edge has limited support for IAccessible, therefore the URLs will be missing the http:// or
 https:// scheme prefix.
 
+Edgium (new Edge based on Chrome) does not suffer this limitation, and is treated as any other
+Chrome variant by WebAutoType
+
 
 Firefox
 -------
@@ -175,6 +178,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.4
+ Improved Edgium support, will retry up to a 3 second timeout due to delays in enabling accessibility
+
 v6.3
  Improved Chrome and chromium-based browser support. In many cases the --force-renderer-accessibility
   is no longer required.
