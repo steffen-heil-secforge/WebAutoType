@@ -23,9 +23,6 @@ using KeePassLib.Cryptography.PasswordGenerator;
 
 namespace WebAutoType
 {
-	/// <summary>
-	/// 
-	/// </summary>
 	public sealed class WebAutoTypeExt : Plugin
 	{
 		private IPluginHost m_host;
@@ -214,8 +211,15 @@ namespace WebAutoType
 						urlSuggestions.Add(url);
 					}
 
-					// Logic adapted from EntryTemplates.CreateEntry
 					var database = m_host.Database;
+
+					if (String.IsNullOrEmpty(selectedText))
+					{
+						// Fall back on the default username, if none is selected
+						selectedText = database.DefaultUserName;
+					}
+
+					// Logic adapted from EntryTemplates.CreateEntry
 					var entry = new PwEntry(true, true);
 					if (!String.IsNullOrEmpty(title)) entry.Strings.Set(PwDefs.TitleField, new ProtectedString(database.MemoryProtection.ProtectTitle, title));
 					if (urlSuggestions.Any()) entry.Strings.Set(PwDefs.UrlField, new ProtectedString(database.MemoryProtection.ProtectUrl, urlSuggestions[0]));
@@ -270,8 +274,18 @@ namespace WebAutoType
 
 						if (ShowForegroundDialog(entryForm) == DialogResult.OK)
 						{
+							// Logic from MainForm.OnEntryAdd
 							group.AddEntry(entry, true, true);
-							m_host.MainWindow.UpdateUI(false, null, database.UINeedsIconUpdate, null, true, null, true);
+							m_host.MainWindow.UpdateUI(false, m_host.MainWindow.DocumentManager.FindDocument(database), true, group, true, null, true);
+
+							m_host.MainWindow.SelectEntries(new PwObjectList<PwEntry> { entry }, true, true);
+							m_host.MainWindow.EnsureVisibleEntry(entry.Uuid);
+							m_host.MainWindow.UpdateUI(false, null, false, null, false, null, false);
+
+							if (Program.Config.Application.AutoSaveAfterEntryEdit)
+							{
+								m_host.MainWindow.SaveDatabase(database, null);
+							}
 						}
 						else
 						{

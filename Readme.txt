@@ -178,6 +178,10 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.5.0
+ Respect database Default User Name and Save after Editing settings when adding an entry
+ Select the newly created entry when an entry is added
+
 v6.4.1
  Fixed crash when Chrome windows without accessible document objects exist
 
