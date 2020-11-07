@@ -32,12 +32,15 @@ namespace WebAutoType
 
 			var windowDoc = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(chromeRenderHwnd), role: AccessibleRole.Document);
 
-			// Edgeium takes some time to enable accessibility, so wait a bit to see if we get it
-			var time = new Stopwatch();
-			time.Start();
-			while (!(windowDoc.accFocus is IAccessible) && time.Elapsed < WaitForAccessibility)
+			if (windowDoc != null)
 			{
-				Thread.Sleep(ChromeRePollDelay);
+				// Edgeium takes some time to enable accessibility, so wait a bit to see if we get it
+				var time = new Stopwatch();
+				time.Start();
+				while (!(windowDoc.accFocus is IAccessible) && time.Elapsed < WaitForAccessibility)
+				{
+					Thread.Sleep(ChromeRePollDelay);
+				}
 			}
 
 			return windowDoc;

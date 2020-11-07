@@ -178,6 +178,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.4.1
+ Fixed crash when Chrome windows without accessible document objects exist
+
 v6.4
  Improved Edgium support, will retry up to a 3 second timeout due to delays in enabling accessibility
 
