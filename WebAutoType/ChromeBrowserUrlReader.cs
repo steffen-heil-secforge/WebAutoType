@@ -30,20 +30,31 @@ namespace WebAutoType
 			// Chrome only enables accessibility if it gets a top-level IAccessible request, so let's make one first
 			var _ = AccessibleObjectHelper.GetAccessibleObjectFromWindow(mHwnd).accName;
 
-			var windowDoc = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(chromeRenderHwnd), role: AccessibleRole.Document);
-
-			if (windowDoc != null)
+			IAccessible windowDoc;
+			var time = new Stopwatch();
+			time.Start();
+			while ((windowDoc = TryGetAccessibleDocFromRenderWindow(chromeRenderHwnd)) == null && time.Elapsed < WaitForAccessibility)
 			{
-				// Edgeium takes some time to enable accessibility, so wait a bit to see if we get it
-				var time = new Stopwatch();
-				time.Start();
-				while (!(windowDoc.accFocus is IAccessible) && time.Elapsed < WaitForAccessibility)
-				{
-					Thread.Sleep(ChromeRePollDelay);
-				}
+				Thread.Sleep(ChromeRePollDelay);
 			}
 
 			return windowDoc;
+		}
+
+		private static IAccessible TryGetAccessibleDocFromRenderWindow(IntPtr chromeRenderHwnd)
+		{
+			try
+			{
+				var windowDoc = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(chromeRenderHwnd), role: AccessibleRole.Document);
+				if (windowDoc.accFocus is IAccessible)
+				{
+					return windowDoc;
+				}
+			}
+			catch (System.Runtime.InteropServices.COMException)
+			{
+			}
+			return null;
 		}
 
 		public ChromeAccessibilityWinEventHook ChromeAccessibilityWinEventHook;
