@@ -46,6 +46,7 @@ namespace MSAALister
 		{
 			"MozillaUIWindowClass",
 			"MozillaWindowClass",
+			"WaterfoxWindowClass",
 			"IEFrame",
 			"OperaWindowClass",
 			"ApplicationFrameWindow", // Edge, or, unfortunately, any Metro app
@@ -85,7 +86,8 @@ namespace MSAALister
 
 			sFile.WriteLine("{0}[{1}]", hWnd.ToString("X"), className);
 
-			if (className == "MozillaWindowClass")
+			if (className == "MozillaWindowClass" ||
+				className == "WaterfoxWindowClass")
 			{
 				WriteUrl(GetFirefoxUrl(hWnd));
 			}

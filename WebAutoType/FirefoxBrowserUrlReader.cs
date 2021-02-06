@@ -42,7 +42,6 @@ namespace WebAutoType
 			return url;
 		}
 
-		
 		private void EnsureFirefoxAccessibilityEnabled()
 		{
 			// Firefox may not have had a11y enabled, so if it doesn't find the document, trigger it by setting making the window lose and regain focus (note don't do this for GetDocument basic, as this might be used for URLs where the window is not foreground)

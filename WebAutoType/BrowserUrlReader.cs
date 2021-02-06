@@ -10,10 +10,10 @@ namespace WebAutoType
 {
 	internal abstract class BrowserUrlReader
 	{
-		[DllImport("user32.dll", EntryPoint = "FindWindowEx", CharSet = CharSet.Auto)]
+		[DllImport("user32.dll", EntryPoint = "FindWindowEx", CharSet = CharSet.Unicode)]
 		static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
-		[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 		private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
 		#region Factory
@@ -23,7 +23,8 @@ namespace WebAutoType
 			{
 				var className = GetWindowClassName(hwnd);
 
-				if (className == "MozillaWindowClass") // new FF, 8.0 etc
+				if (className == "MozillaWindowClass" || // new FF, 8.0 etc
+					className == "WaterfoxWindowClass")
 				{
 					return new FirefoxBrowserUrlReader(hwnd);
 				}
@@ -49,6 +50,7 @@ namespace WebAutoType
 			var className = GetWindowClassName(hWnd);
 
 			if (className == "MozillaWindowClass" ||
+				className == "WaterfoxWindowClass" ||
 				className == "IEFrame" ||
 				className.StartsWith("Chrome_WidgetWin_") || // Special case for Chrome which may append any number to the class name
 				className.StartsWith("YandexBrowser_WidgetWin_") || // Yandex is just a renamed Chrome
@@ -162,7 +164,7 @@ namespace WebAutoType
 
 		protected virtual IAccessible GetElementParentDocument(IAccessible element)
 		{
-			return AccessibleObjectHelper.FindAncestor(element, 
+			return AccessibleObjectHelper.FindAncestor(element,
 				role: AccessibleRole.Document,
 				hasState: AccessibleStates.Focusable);
 		}

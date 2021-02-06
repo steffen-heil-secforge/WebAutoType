@@ -178,6 +178,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.6.0
+ Fix support for Waterfox 3.0.2
+
 v6.5.1
  Fix URL detection on first usage in Edge throwing a COMException HRESULT fail
 
