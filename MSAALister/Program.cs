@@ -86,23 +86,30 @@ namespace MSAALister
 
 			sFile.WriteLine("{0}[{1}]", hWnd.ToString("X"), className);
 
-			if (className == "MozillaWindowClass" ||
+			try
+			{
+				if (className == "MozillaWindowClass" ||
 				className == "WaterfoxWindowClass")
-			{
-				WriteUrl(GetFirefoxUrl(hWnd));
+				{
+					WriteUrl(GetFirefoxUrl(hWnd));
+				}
+				else if (className == "IEFrame")
+				{
+					WriteUrl(GetInternetExplorerUrl(hWnd));
+				}
+				else if (className == "ApplicationFrameWindow")
+				{
+					WriteUrl(GetEdgeUrl(hWnd));
+				}
+				else if (className.StartsWith("Chrome_WidgetWin_") ||
+						 className.StartsWith("YandexBrowser_WidgetWin_"))
+				{
+					WriteUrl(GetChromeUrl(hWnd));
+				}
 			}
-			else if (className == "IEFrame")
+			catch (Exception ex)
 			{
-				WriteUrl(GetInternetExplorerUrl(hWnd));
-			}
-			else if (className == "ApplicationFrameWindow")
-			{
-				WriteUrl(GetEdgeUrl(hWnd));
-			}
-			else if (className.StartsWith("Chrome_WidgetWin_") ||
-			         className.StartsWith("YandexBrowser_WidgetWin_"))
-			{
-				WriteUrl(GetChromeUrl(hWnd));
+				sFile.WriteLine("Exception trying to get url: " + ex);
 			}
 
 			if (SupportedTopLevelWindowClasses.Contains(className))
@@ -282,8 +289,18 @@ namespace MSAALister
 			{
 				name = "<no name>";
 			}
+
+			object state;
+			try
+			{
+				state = child.accState[0];
+			}
+			catch (NullReferenceException)
+			{
+				state = "<no state>";
+			}
 			
-			sFile.WriteLine("{0}[{1}]:{2}={3}, Role:{4}, State:{5}, Pos:{6},{7}", hWnd.ToString("X"), GetClassName(hWnd), name, value, roleString, child.accState[0], left, top);
+			sFile.WriteLine("{0}[{1}]:{2}={3}, Role:{4}, State:{5}, Pos:{6},{7}", hWnd.ToString("X"), GetClassName(hWnd), name, value, roleString, state, left, top);
 		}
 
 
@@ -315,9 +332,13 @@ namespace MSAALister
 
 		private static string GetInternetExplorerUrl(IntPtr hwnd)
 		{
-			var ieServerHwnd = FindDescendantWindows(hwnd, "Internet Explorer_Server").First();
-			var ieServer = AccessibleObjectHelper.GetAccessibleObjectFromWindow(ieServerHwnd);
+			var ieServerHwnd = FindDescendantWindows(hwnd, "Internet Explorer_Server").FirstOrDefault();
+			if (ieServerHwnd == null)
+			{
+				return null;
+			}
 
+			var ieServer = AccessibleObjectHelper.GetAccessibleObjectFromWindow(ieServerHwnd);
 			if (ieServer == null)
 			{
 				return null;
@@ -338,21 +359,24 @@ namespace MSAALister
 			{
 				return null;
 			}
+
+			// Chrome only enables accessibility if it gets a top-level IAccessible request, so let's make one first
+			var _ = AccessibleObjectHelper.GetAccessibleObjectFromWindow(hwnd).accName;
+
 			var doc = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(chromeRenderHwnd),
 				role: AccessibleRole.Document);
 			if (doc == null)
 			{
 				return null;
 			}
-			
+
 			var test = doc.accFocus as IAccessible;
 			if (test != null)
 			{
 				LogAccessibleObject(0, hwnd, test);
-				return doc.accValue[0];
 			}
 
-			return null;
+			return doc.accValue[0];
 		}
 
 		private static string GetEdgeUrl(IntPtr hwnd)

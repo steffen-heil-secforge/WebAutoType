@@ -35,6 +35,10 @@ namespace WebAutoType
 				else if (className.StartsWith("Chrome_WidgetWin_") ||
 						 className.StartsWith("YandexBrowser_WidgetWin_"))
 				{
+					if (ChromeBrowserUrlReader.IsEmbeddedIEFrame(hwnd))
+					{
+						return new InternetExplorerBrowserUrlReader(hwnd);
+					}
 					return new ChromeBrowserUrlReader(hwnd);
 				}
 				else if (className == "ApplicationFrameWindow") // Edge (or, unfortunately, any other Metro app))
@@ -169,7 +173,7 @@ namespace WebAutoType
 				hasState: AccessibleStates.Focusable);
 		}
 
-		protected IEnumerable<IntPtr> FindDescendantWindows(IntPtr windowHandle, string className)
+		protected static IEnumerable<IntPtr> FindDescendantWindows(IntPtr windowHandle, string className)
 		{
 			var results = new List<IntPtr>();
 

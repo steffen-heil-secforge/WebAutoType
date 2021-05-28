@@ -14,6 +14,11 @@ namespace WebAutoType
 
 		// When Edgeium enables accessibility, it also takes a little while to enable, but we don't get an event, so timeout after this long
 		private static readonly TimeSpan WaitForAccessibility = TimeSpan.FromSeconds(3);
+		internal static bool IsEmbeddedIEFrame(IntPtr hwnd)
+		{
+			// Try embedded IE mode in Edgium
+			return FindDescendantWindows(hwnd, "IEFrame").Any();
+		}
 
 		public ChromeBrowserUrlReader(IntPtr hwnd) : base(hwnd)
 		{
@@ -41,6 +46,7 @@ namespace WebAutoType
 			return windowDoc;
 		}
 
+		
 		private static IAccessible TryGetAccessibleDocFromRenderWindow(IntPtr chromeRenderHwnd)
 		{
 			try

@@ -36,24 +36,32 @@ namespace WebAutoType
 
 		public static IEnumerable<IAccessible> GetChildren(IAccessible parent)
 		{
-			var children = new object[parent.accChildCount];
 
-			int count;
-			var result = AccessibleChildren(parent, 0, children.Length, children, out count);
-			if (result != 0 && result != 1)
+			try
 			{
-				return new IAccessible[0];
-			}
-			if (count == 1 && children[0] is int)
-			{
-				var child = parent.accNavigate(NAVDIR_FIRSTCHILD, 0) as IAccessible;
-				if (child == null)
+				var children = new object[parent.accChildCount];
+
+				int count;
+				var result = AccessibleChildren(parent, 0, children.Length, children, out count);
+				if (result != 0 && result != 1)
 				{
 					return new IAccessible[0];
 				}
-				return new[] { child };
+				if (count == 1 && children[0] is int)
+				{
+					var child = parent.accNavigate(NAVDIR_FIRSTCHILD, 0) as IAccessible;
+					if (child == null)
+					{
+						return new IAccessible[0];
+					}
+					return new[] { child };
+				}
+				return children.OfType<IAccessible>();
 			}
-			return children.OfType<IAccessible>();
+			catch (Exception)
+			{
+				return Enumerable.Empty<IAccessible>();
+			}
 		}
 
 		public static IntPtr GetWindowHandleFromAccessibleObject(IAccessible accessibleObject)
