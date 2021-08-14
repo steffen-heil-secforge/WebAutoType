@@ -74,8 +74,7 @@ namespace WebAutoType
 						role: AccessibleRole.PropertyPage,
 						hasNotState: AccessibleStates.Offscreen /*(inactive tab)*/);
 
-			var browser = AccessibleObjectHelper.FindChild(propertyPage, customRole: "browser, http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul") // Firefox 59+
-			           ?? AccessibleObjectHelper.FindChild(propertyPage, customRole: "browser"); // Firefox <59
+			var browser = AccessibleObjectHelper.FindChild(propertyPage, hasState: AccessibleStates.Focusable);
 
 			return AccessibleObjectHelper.FindChild(browser, role: AccessibleRole.Document);
 		}

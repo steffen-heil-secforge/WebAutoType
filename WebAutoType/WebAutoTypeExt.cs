@@ -757,9 +757,6 @@ namespace WebAutoType
 		}
 		#endregion
 
-		/// <summary>
-		///
-		/// </summary>
 		public override void Terminate()
 		{
 			GlobalWindowManager.WindowAdded -= GlobalWindowManager_WindowAdded;

@@ -47,8 +47,11 @@ namespace WebAutoType
 				{
 					return new IAccessible[0];
 				}
-				if (count == 1 && children[0] is int)
+				if (result == 1 ||
+					count == 1 && children[0] is int)
 				{
+					// Could not get the list of children in the easy way, so try navigating instead
+
 					var child = parent.accNavigate(NAVDIR_FIRSTCHILD, 0) as IAccessible;
 					if (child == null)
 					{
@@ -56,6 +59,7 @@ namespace WebAutoType
 					}
 					return new[] { child };
 				}
+
 				return children.OfType<IAccessible>();
 			}
 			catch (Exception)

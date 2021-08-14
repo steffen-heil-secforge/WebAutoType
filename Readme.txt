@@ -178,6 +178,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.8.0
+ Fix support for Firefox 92
+
 v6.7.0
  Fix support for Internet Explorer compatibility mode in Edge
 
