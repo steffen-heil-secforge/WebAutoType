@@ -222,19 +222,19 @@ namespace WebAutoType
 		private void mURL_DropDown(object sender, EventArgs e)
 		{
 			// Get all the currently open browser window URLs
-			mURL.Items.Clear();
+			BeginInvoke((Action)(() => mURL.Items.Clear()));
 
 			ThreadPool.QueueUserWorkItem(PopulateUrlDropDown);
-			//mURL.Items.AddRange((from browserWindow in WebBrowserUrl.GetTopLevelBrowserWindows() select WebBrowserUrl.GetBrowserUrl(browserWindow)).ToArray());
 		}
 
 		private void PopulateUrlDropDown(object state)
 		{
-			foreach (var browserWindowUrl in WebBrowserUrl.GetTopLevelBrowserWindowUrls())
+			var browserWindowUrls = WebBrowserUrl.GetTopLevelBrowserWindowUrls().ToArray();
+
+			if (IsHandleCreated)
 			{
-				mURL.BeginInvoke(new Action(() => mURL.Items.Add(browserWindowUrl)));
+				BeginInvoke((Action)(() => mURL.Items.AddRange(browserWindowUrls)));
 			}
 		}
-
 	}
 }

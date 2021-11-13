@@ -30,7 +30,7 @@ namespace WebAutoType
 		/// Gets URLs for all top-level supported browser windows
 		/// </summary>
 		/// <returns></returns>
-		public static IEnumerable<String> GetTopLevelBrowserWindowUrls()
+		public static IReadOnlyCollection<String> GetTopLevelBrowserWindowUrls()
 		{
 			sTopLevelBrowserWindowHandles = new List<IntPtr>();
 			EnumWindows(EnumWindows, IntPtr.Zero);

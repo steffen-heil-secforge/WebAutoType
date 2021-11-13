@@ -178,6 +178,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.8.1
+ Fix crash if edit auto-type entry window is closed after clicking URL dropdown, before it is filled
+
 v6.8.0
  Fix support for Firefox 92
 
