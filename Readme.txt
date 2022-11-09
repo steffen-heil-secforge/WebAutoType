@@ -178,6 +178,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.8.2
+ Fix "Object reference not set to an instance of an object" if Chrome accessibility is disabled
+
 v6.8.1
  Fix crash if edit auto-type entry window is closed after clicking URL dropdown, before it is filled
 

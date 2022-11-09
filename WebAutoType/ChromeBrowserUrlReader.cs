@@ -52,7 +52,7 @@ namespace WebAutoType
 			try
 			{
 				var windowDoc = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(chromeRenderHwnd), role: AccessibleRole.Document);
-				if (windowDoc.accFocus is IAccessible)
+				if (windowDoc != null && windowDoc.accFocus is IAccessible)
 				{
 					return windowDoc;
 				}
