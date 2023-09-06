@@ -21,13 +21,14 @@ Features
 
 Installation
 ------------
-Place WebAutoType.plgx in your KeePass Plugins folder. A "WebAutoType Options" menu item will
+Place WebAutoType.dll in your KeePass Plugins folder. If you are using a custom build of KeePass,
+place WebAutoType.plgx in the Plugins folder too. A "WebAutoType Options" menu item will
 be added to the KeePass "Tools" menu.
 
 
 Uninstallation
 --------------
-Delete WebAutoType.plgx from your KeePass Plugins folder.
+Delete WebAutoType.dll (and .plgx) from your KeePass Plugins folder.
 
 
 Google Chrome
@@ -178,6 +179,10 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.9.0
+ Fix support for Tree Style Tabs or other sidebar in Firefox
+ Follow new KeePass recommendation to distribute both plgx and dll files in release zip
+
 v6.8.2
  Fix "Object reference not set to an instance of an object" if Chrome accessibility is disabled
 
