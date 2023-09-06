@@ -318,14 +318,13 @@ namespace MSAALister
 			var propertyPage = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.FindChild(AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(hwnd),
 				role: AccessibleRole.Application),
 					role: AccessibleRole.Grouping,
-					hasNotState: AccessibleStates.Invisible),
+					hasNotState: AccessibleStates.Invisible | AccessibleStates.Focusable),
 						role: AccessibleRole.PropertyPage,
 						hasNotState: AccessibleStates.Offscreen /*(inactive tab)*/);
 
-			var browser = AccessibleObjectHelper.FindChild(propertyPage, customRole: "browser, http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul") // Firefox 59+
-			           ?? AccessibleObjectHelper.FindChild(propertyPage, customRole: "browser"); // Firefox <59
+            var browser = AccessibleObjectHelper.FindChild(propertyPage, hasState: AccessibleStates.Focusable);
 
-			var doc = AccessibleObjectHelper.FindChild(browser, role: AccessibleRole.Document);
+            var doc = AccessibleObjectHelper.FindChild(browser, role: AccessibleRole.Document);
 
 			return doc?.accValue[0];
 		}

@@ -70,7 +70,7 @@ namespace WebAutoType
 			var propertyPage = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.FindChild(AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(mHwnd),
 				role: AccessibleRole.Application),
 					role: AccessibleRole.Grouping,
-					hasNotState: AccessibleStates.Invisible),
+					hasNotState: AccessibleStates.Invisible | AccessibleStates.Focusable),
 						role: AccessibleRole.PropertyPage,
 						hasNotState: AccessibleStates.Offscreen /*(inactive tab)*/);
 
