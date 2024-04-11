@@ -315,21 +315,39 @@ namespace MSAALister
 
 		private static string GetFirefoxUrl(IntPtr hwnd)
 		{
-			var propertyPage = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.FindChild(AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(hwnd),
-				role: AccessibleRole.Application),
-					role: AccessibleRole.Grouping,
-					hasNotState: AccessibleStates.Invisible | AccessibleStates.Focusable),
-						role: AccessibleRole.PropertyPage,
-						hasNotState: AccessibleStates.Offscreen /*(inactive tab)*/);
-
-            var browser = AccessibleObjectHelper.FindChild(propertyPage, hasState: AccessibleStates.Focusable);
-
-            var doc = AccessibleObjectHelper.FindChild(browser, role: AccessibleRole.Document);
+			var doc = GetFirefoxDocument(hwnd);
 
 			return doc?.accValue[0];
 		}
 
-		private static string GetInternetExplorerUrl(IntPtr hwnd)
+        protected static IAccessible GetFirefoxDocument(IntPtr hwnd)
+        {
+            var application = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(hwnd),
+                role: AccessibleRole.Application);
+
+            // Sometimes there are multiple groupings, indistinguishable, so try each to find the property page below it
+            var groupings = AccessibleObjectHelper.GetChildren(application).Where(child =>
+                AccessibleObjectHelper.AccessibleObjectMatchesConditions(child,
+                    role: AccessibleRole.Grouping,
+                        hasNotState: AccessibleStates.Invisible | AccessibleStates.Focusable));
+
+            foreach (var grouping in groupings)
+            {
+                var propertyPage = AccessibleObjectHelper.FindChild(grouping,
+                        role: AccessibleRole.PropertyPage,
+                        hasNotState: AccessibleStates.Offscreen /*(inactive tab)*/);
+
+                if (propertyPage != null)
+                {
+                    var browser = AccessibleObjectHelper.FindChild(propertyPage, hasState: AccessibleStates.Focusable);
+                    return AccessibleObjectHelper.FindChild(browser, role: AccessibleRole.Document);
+                }
+            }
+
+            return null;
+        }
+
+        private static string GetInternetExplorerUrl(IntPtr hwnd)
 		{
 			var ieServerHwnd = FindDescendantWindows(hwnd, "Internet Explorer_Server").FirstOrDefault();
 			if (ieServerHwnd == null)

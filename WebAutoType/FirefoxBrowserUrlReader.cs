@@ -67,16 +67,29 @@ namespace WebAutoType
 
 		protected override IAccessible GetDocument()
 		{
-			var propertyPage = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.FindChild(AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(mHwnd),
-				role: AccessibleRole.Application),
+			var application = AccessibleObjectHelper.FindChild(AccessibleObjectHelper.GetAccessibleObjectFromWindow(mHwnd),
+				role: AccessibleRole.Application);
+
+			// Sometimes there are multiple groupings, indistinguishable, so try each to find the property page below it
+			var groupings = AccessibleObjectHelper.GetChildren(application).Where(child =>
+				AccessibleObjectHelper.AccessibleObjectMatchesConditions(child,
 					role: AccessibleRole.Grouping,
-					hasNotState: AccessibleStates.Invisible | AccessibleStates.Focusable),
-						role: AccessibleRole.PropertyPage,
-						hasNotState: AccessibleStates.Offscreen /*(inactive tab)*/);
+						hasNotState: AccessibleStates.Invisible | AccessibleStates.Focusable));
 
-			var browser = AccessibleObjectHelper.FindChild(propertyPage, hasState: AccessibleStates.Focusable);
+			foreach (var grouping in groupings)
+			{
+                var propertyPage = AccessibleObjectHelper.FindChild(grouping,
+                        role: AccessibleRole.PropertyPage,
+                        hasNotState: AccessibleStates.Offscreen /*(inactive tab)*/);
 
-			return AccessibleObjectHelper.FindChild(browser, role: AccessibleRole.Document);
+				if (propertyPage != null)
+				{
+                    var browser = AccessibleObjectHelper.FindChild(propertyPage, hasState: AccessibleStates.Focusable);
+                    return AccessibleObjectHelper.FindChild(browser, role: AccessibleRole.Document);
+                }
+            }
+
+			return null;
 		}
 	}
 }

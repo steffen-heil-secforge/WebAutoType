@@ -179,6 +179,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.9.1
+ Fix support for Firefox 125
+
 v6.9.0
  Fix support for Tree Style Tabs or other sidebar in Firefox
  Follow new KeePass recommendation to distribute both plgx and dll files in release zip

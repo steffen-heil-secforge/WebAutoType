@@ -107,7 +107,7 @@ namespace WebAutoType
 			return null;
 		}
 
-		private static bool AccessibleObjectMatchesConditions(IAccessible accessibleObject, AccessibleRole? role, string customRole, AccessibleStates? hasState = null, AccessibleStates? hasNotState = null)
+		public static bool AccessibleObjectMatchesConditions(IAccessible accessibleObject, AccessibleRole? role = null, string customRole = null, AccessibleStates? hasState = null, AccessibleStates? hasNotState = null)
 		{
 			try
 			{
