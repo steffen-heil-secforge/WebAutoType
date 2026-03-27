@@ -179,6 +179,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.9.3
+ Compatibility with UIAccess for KeePass 2.62
+
 v6.9.2
  Workaround for intermittent InvalidCastException with Chrome
 

@@ -566,7 +566,6 @@ namespace WebAutoType
 				var banner = editForm.Controls.Find("m_bannerImage", false).FirstOrDefault();
 				var placeholders = editForm.Controls.Find("m_rtbPlaceholders", false).FirstOrDefault();
 
-
 				// Add the new control, docked just below the banner
 				var extraControls = new EditAutoTypeExtraControls(editForm)
 				{
@@ -586,30 +585,6 @@ namespace WebAutoType
 
 				var shiftAmount = extraControls.Height;
 
-				// Move all existing controls, except for the banner and the extra controls, into a container
-				var container = new Panel
-				{
-					Name = ExistingControlsContainerName,
-					Size = editForm.ClientSize,
-					Location = Point.Empty,
-					Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom,
-				};
-
-				var acceptButton = editForm.AcceptButton;
-				var cancelButton = editForm.CancelButton;
-
-				foreach (var control in editForm.Controls.Cast<Control>().ToArray())
-				{
-					if (control != banner &&
-						control != extraControls)
-					{
-						container.Controls.Add(control);
-					}
-				}
-
-				editForm.AcceptButton = acceptButton;
-				editForm.CancelButton = cancelButton;
-
 				if (editForm.FormBorderStyle == FormBorderStyle.Sizable)
 				{
 					ApplyKeeResizeHack(editForm, shiftAmount);
@@ -621,11 +596,33 @@ namespace WebAutoType
 				{
 					editForm.MinimumSize = new Size(editForm.MinimumSize.Width, editForm.MinimumSize.Height + shiftAmount);
 				}
-				
 
-				// Then put the container panel back on the form, shifted downwards
-				container.Top = shiftAmount;
+				// Move all existing controls, except for the banner and the extra controls, into a container
+				var container = new Panel
+				{
+					Name = ExistingControlsContainerName,
+					Size = editForm.ClientSize,
+					Location = new Point(0, shiftAmount),
+					Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom,
+				};
+
 				editForm.Controls.Add(container);
+
+				var acceptButton = editForm.AcceptButton;
+				var cancelButton = editForm.CancelButton;
+
+				foreach (var control in editForm.Controls.Cast<Control>().ToArray())
+				{
+					if (control != banner &&
+						control != extraControls &&
+						control != container)
+					{
+						container.Controls.Add(control);
+					}
+				}
+
+				editForm.AcceptButton = acceptButton;
+				editForm.CancelButton = cancelButton;
 			}
 			finally
 			{
