@@ -179,6 +179,9 @@ Bugs can be reported using the issue tracker, for anything else, a discussion fo
 
 Changelog
 --------
+v6.9.2
+ Workaround for intermittent InvalidCastException with Chrome
+
 v6.9.1
  Fix support for Firefox 125
 

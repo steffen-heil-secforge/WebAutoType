@@ -70,7 +70,7 @@
     <Otherwise>
       <ItemGroup>
         <Reference Include="KeePass">
-          <HintPath>..\..\KeePass\KeePass.exe</HintPath>
+          <HintPath>..\..\KeePass BinCompat\2.42\KeePass.exe</HintPath>
           <Private>False</Private>
         </Reference>
       </ItemGroup>

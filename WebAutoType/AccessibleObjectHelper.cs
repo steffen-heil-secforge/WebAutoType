@@ -120,6 +120,18 @@ namespace WebAutoType
 				{
 					actualRole = "";
 				}
+				catch (InvalidCastException)
+				{
+                    // Chrome is known to sometimes throw this, but to work correctly on repeat, so try again
+                    try
+                    {
+                        actualRole = accessibleObject.accRole[0];
+                    }
+                    catch (COMException)
+                    {
+                        actualRole = "";
+                    }
+				}
 
 				return (role == null || actualRole.Equals((int)role)) &&
 						(customRole == null || actualRole.Equals(customRole)) &&
