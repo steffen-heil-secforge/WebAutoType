@@ -24,7 +24,7 @@ namespace WebAutoType
 
 		protected override string GetDocumentUrl(IAccessible document)
 		{
-			return document.accName[0];
+			return AccessibleObjectHelper.SafeGetName(document);
 		}
 
 		protected override string GetDocumentTitle(IAccessible document)
@@ -32,7 +32,7 @@ namespace WebAutoType
 			var firstChild = AccessibleObjectHelper.GetChildren(document).FirstOrDefault();
 			if (firstChild != null)
 			{
-				return firstChild.accName[0];
+				return AccessibleObjectHelper.SafeGetName(firstChild);
 			}
 			return null;
 		}

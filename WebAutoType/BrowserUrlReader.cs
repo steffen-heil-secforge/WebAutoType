@@ -139,7 +139,7 @@ namespace WebAutoType
 				title = GetDocumentTitle(windowDoc);
 				return GetDocumentUrl(windowDoc);
 			}
-			if ((int)focusedElement.accRole[0] == (int)AccessibleRole.Text)
+			if (AccessibleObjectHelper.SafeGetRole(focusedElement).Equals((int)AccessibleRole.Text))
 			{
 				selectedText = AccessibleObjectHelper.SafeGetValue(focusedElement);
 			}
@@ -158,12 +158,12 @@ namespace WebAutoType
 
 		protected virtual string GetDocumentUrl(IAccessible document)
 		{
-			return document.accValue[0];
+			return AccessibleObjectHelper.SafeGetValue(document);
 		}
 
 		protected virtual string GetDocumentTitle(IAccessible document)
 		{
-			return document.accName[0];
+			return AccessibleObjectHelper.SafeGetName(document);
 		}
 
 		protected virtual IAccessible GetElementParentDocument(IAccessible element)

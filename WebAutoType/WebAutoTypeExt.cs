@@ -356,8 +356,20 @@ namespace WebAutoType
 			}
 
 			bool passwordFieldFocussed = false;
+			string sUrl;
 
-			string sUrl = WebBrowserUrl.GetFocusedBrowserUrl(mChromeAccessibility, e.TargetWindowHandle, out passwordFieldFocussed);
+			// KeePass raises this event from AutoType.PerformGlobal without a guard of its own, so
+			// anything thrown here aborts the auto-type and is shown to the user as an error message
+			// box. Reading the URL is best effort: if the browser's accessibility interface does not
+			// cooperate, fall back on KeePass's own window title matching instead.
+			try
+			{
+				sUrl = WebBrowserUrl.GetFocusedBrowserUrl(mChromeAccessibility, e.TargetWindowHandle, out passwordFieldFocussed);
+			}
+			catch (Exception)
+			{
+				return;
+			}
 
 			if (!string.IsNullOrEmpty(sUrl))
 			{
