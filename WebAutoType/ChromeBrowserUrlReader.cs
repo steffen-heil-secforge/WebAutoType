@@ -60,6 +60,11 @@ namespace WebAutoType
 			catch (System.Runtime.InteropServices.COMException)
 			{
 			}
+			catch (InvalidCastException)
+			{
+				// A node of the accessibility tree Chrome is still building stopped answering
+				// QueryInterface (E_NOINTERFACE); reporting no document yet lets the caller poll again
+			}
 			return null;
 		}
 

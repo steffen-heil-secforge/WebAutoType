@@ -111,27 +111,7 @@ namespace WebAutoType
 		{
 			try
 			{
-				object actualRole;
-				try
-				{
-					actualRole = accessibleObject.accRole[0];
-				}
-				catch (COMException)
-				{
-					actualRole = "";
-				}
-				catch (InvalidCastException)
-				{
-                    // Chrome is known to sometimes throw this, but to work correctly on repeat, so try again
-                    try
-                    {
-                        actualRole = accessibleObject.accRole[0];
-                    }
-                    catch (COMException)
-                    {
-                        actualRole = "";
-                    }
-				}
+				object actualRole = SafeGetRole(accessibleObject);
 
 				return (role == null || actualRole.Equals((int)role)) &&
 						(customRole == null || actualRole.Equals(customRole)) &&
@@ -144,9 +124,61 @@ namespace WebAutoType
 			}
 		}
 
+		/// <summary>
+		/// Reads the role of an accessible object. Chrome is known to sometimes throw an
+		/// InvalidCastException (E_NOINTERFACE) for a node of an accessibility tree it is still
+		/// building, but to work correctly on repeat, so one retry is made. If the role cannot be
+		/// read at all, a role that matches nothing is reported rather than throwing, since a node
+		/// that cannot be queried is of no use to the caller anyway.
+		/// </summary>
+		public static object SafeGetRole(IAccessible accessibleObject)
+		{
+			try
+			{
+				return accessibleObject.accRole[0];
+			}
+			catch (COMException)
+			{
+				return "";
+			}
+			catch (InvalidCastException)
+			{
+				// Try again, but do not let a repeated failure escape: it would otherwise surface as
+				// an error message box out of KeePass's global auto-type, with nothing typed
+				try
+				{
+					return accessibleObject.accRole[0];
+				}
+				catch (COMException)
+				{
+					return "";
+				}
+				catch (InvalidCastException)
+				{
+					return "";
+				}
+			}
+		}
+
 		public static bool HasState(IAccessible accessibleObject, AccessibleStates state)
 		{
-			return ((AccessibleStates)accessibleObject.accState[0] & state) != 0;
+			AccessibleStates actualState;
+			try
+			{
+				actualState = (AccessibleStates)accessibleObject.accState[0];
+			}
+			catch (COMException)
+			{
+				return false;
+			}
+			catch (InvalidCastException)
+			{
+				// Either the same transient failure as for the role, or a state that is not a number
+				// at all; in both cases the state is not known to be present
+				return false;
+			}
+
+			return (actualState & state) != 0;
 		}
 
 		public static string SafeGetValue(IAccessible accessibleObject)
